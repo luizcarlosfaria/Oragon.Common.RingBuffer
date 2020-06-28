@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30128.36
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oragon.Common.RingBuffer", "Oragon.Common.RingBuffer\Oragon.Common.RingBuffer.csproj", "{0EA4354B-276D-4870-AA42-FC6F6DFAD184}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oragon.Common.RingBuffer.Tests", "Oragon.Common.RingBuffer.Tests\Oragon.Common.RingBuffer.Tests.csproj", "{368C48DC-92D8-4B9C-B7B4-47FB2237EF26}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0EA4354B-276D-4870-AA42-FC6F6DFAD184}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EA4354B-276D-4870-AA42-FC6F6DFAD184}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EA4354B-276D-4870-AA42-FC6F6DFAD184}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EA4354B-276D-4870-AA42-FC6F6DFAD184}.Release|Any CPU.Build.0 = Release|Any CPU
+		{368C48DC-92D8-4B9C-B7B4-47FB2237EF26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{368C48DC-92D8-4B9C-B7B4-47FB2237EF26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{368C48DC-92D8-4B9C-B7B4-47FB2237EF26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{368C48DC-92D8-4B9C-B7B4-47FB2237EF26}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9347016A-3ADF-4FF3-9926-1C153DC265CE}
+	EndGlobalSection
+EndGlobal
