@@ -27,9 +27,9 @@ namespace Oragon.Common.RingBuffer.Tests
             for (int i = 0; i < runCount; i++)
             {
                 Thread thread = new Thread(() => {
-                    using var x = ringBuffer.Accquire();
+                    using var bufferedItem = ringBuffer.Accquire();
                     System.Threading.Thread.Sleep(workTime);
-                    System.Diagnostics.Debug.WriteLine($"Item {x.Current} - processado!");
+                    System.Diagnostics.Debug.WriteLine($"Item {bufferedItem.Current} - processado!");
                 });
                 thread.Start();
                 threads.Add(thread);

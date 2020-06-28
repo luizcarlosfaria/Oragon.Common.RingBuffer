@@ -34,7 +34,7 @@ namespace Oragon.Common.RingBuffer.Tests
                 List<Task> tasks = new List<Task>();
                 for (int i = 0; i < runCount; i++)
                 {
-                    using var x = disposableBuffer.Accquire();
+                    using var bufferedItem = disposableBuffer.Accquire();
                     System.Threading.Thread.Sleep(workTime);
                 }
                 Assert.Equal(bufferSize, disposableBuffer.Available);
@@ -69,9 +69,9 @@ namespace Oragon.Common.RingBuffer.Tests
                 for (int i = 0; i < runCount; i++)
                 {
                     Thread thread = new Thread(() => {
-                        using var x = disposableBuffer.Accquire();
+                        using var bufferedItem = disposableBuffer.Accquire();
                         System.Threading.Thread.Sleep(workTime);
-                        System.Diagnostics.Debug.WriteLine($"Item {x.Current} - processado!");
+                        System.Diagnostics.Debug.WriteLine($"Item {bufferedItem.Current} - processado!");
                     });
                     thread.Start();
                     threads.Add(thread);
