@@ -55,9 +55,12 @@ namespace Oragon.Common.RingBuffer
                 while (this.availableBuffer.TryDequeue(out tmpBufferElement) == false)
                 {
                     System.Diagnostics.Debug.WriteLine($"RingBuffer | Waiting.. Disponibilidade:{availableBuffer.Count}");
+
                     Thread.Sleep(waitTime);
                 }
+
                 System.Diagnostics.Debug.WriteLine($"RingBuffer | Ok! Disponibilidade: {availableBuffer.Count}");
+
                 this.Current = tmpBufferElement;
 
             }
