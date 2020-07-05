@@ -26,8 +26,8 @@ namespace Oragon.Common.RingBuffer.BenchmarkApp
 
             //System.Threading.Thread.Sleep(TimeSpan.FromSeconds(15));
 
-            
-          
+
+
         }
 
         [GlobalSetup]
@@ -63,28 +63,24 @@ namespace Oragon.Common.RingBuffer.BenchmarkApp
             connectionRingBuffer.Dispose();
         }
 
+        private static void Send(IModel channel, ReadOnlyMemory<byte> message)
+        {
+            var prop = channel.CreateBasicProperties();
+            prop.DeliveryMode = 1;
+            channel.BasicPublish("amq.fanout", "none", prop, message);
+        }
 
         [Benchmark]
         public int WithRingBuffer()
         {
             var message = new ReadOnlyMemory<byte>(System.Text.Encoding.UTF8.GetBytes("0"));
-            
-            Stopwatch stopwatch = new Stopwatch();
 
-            stopwatch.Start();
             for (var i = 0; i < 100; i++)
                 for (var j = 0; j < 30; j++)
-                    using (var data = modelRingBuffer.Accquire())
+                    using (var accquisiton = modelRingBuffer.Accquire())
                     {
-                        var prop = data.Current.CreateBasicProperties();
-                        prop.DeliveryMode = 1;
-                        data.Current.BasicPublish("amq.fanout", "none", prop, message);
+                        Send(accquisiton.Current, message);
                     }
-
-            stopwatch.Stop();
-
-          
-            Console.WriteLine($"Test 1 | com RingBuffer | {stopwatch.Elapsed:G}");
             return 0;
         }
 
@@ -93,22 +89,15 @@ namespace Oragon.Common.RingBuffer.BenchmarkApp
         {
             var message = new ReadOnlyMemory<byte>(System.Text.Encoding.UTF8.GetBytes("0"));
 
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
             for (var i = 0; i < 100; i++)
                 using (var connection = connectionFactory.CreateConnection())
                 {
                     for (var j = 0; j < 30; j++)
                         using (var model = connection.CreateModel())
                         {
-                            var prop = model.CreateBasicProperties();
-                            prop.DeliveryMode = 1;
-                            model.BasicPublish("amq.fanout", "none", prop, message);
+                            Send(model, message);
                         }
                 }
-            stopwatch.Stop();
-
-            Console.WriteLine($"Test 2 | sem RingBuffer | {stopwatch.Elapsed:G}");
             return 0;
         }
     }
