@@ -8,7 +8,7 @@ namespace Oragon.Common.RingBuffer
 {
     public class RingBuffer<T>
     {
-        private readonly Func<T> bufferFactory;
+        private readonly Func<T> itemFactoryFunc;
 
         protected readonly ConcurrentQueue<T> availableBuffer;
 
@@ -16,21 +16,22 @@ namespace Oragon.Common.RingBuffer
         {
         }
 
-        public RingBuffer(int capacity, Func<T> bufferFactory, TimeSpan waitTime)
+        public RingBuffer(int capacity, Func<T> itemFactoryFunc, TimeSpan waitTime)
         {
             if (capacity <= 0) throw new ArgumentOutOfRangeException(nameof(capacity), "Capacity must be greater than zero");
             this.Capacity = capacity;
-            this.bufferFactory = bufferFactory ?? throw new ArgumentNullException(nameof(bufferFactory), "BufferFactory can't be null");
+            this.itemFactoryFunc = itemFactoryFunc ?? throw new ArgumentNullException(nameof(itemFactoryFunc), "ItemFactoryFunc can't be null");
             this.WaitTime = waitTime;
             this.availableBuffer = new ConcurrentQueue<T>();
             this.Initialize();
+            if (availableBuffer.Count == 0) throw new InvalidOperationException("Buffer is empty");
         }
 
         protected virtual void Initialize()
         {
             for (var i = 0; i < this.Capacity; i++)
             {
-                this.availableBuffer.Enqueue(bufferFactory());
+                this.availableBuffer.Enqueue(itemFactoryFunc());
             }
         }
 
@@ -40,9 +41,9 @@ namespace Oragon.Common.RingBuffer
 
         public int Available => this.availableBuffer.Count;
 
-        public virtual AccquisitonController Accquire() => new AccquisitonController(this.availableBuffer, this.WaitTime);
+        public virtual IAccquisitonController<T> Accquire() => new AccquisitonController(this.availableBuffer, this.WaitTime);
 
-        public class AccquisitonController : IDisposable
+        public class AccquisitonController : IAccquisitonController<T>
         {
             private readonly ConcurrentQueue<T> availableBuffer;
 
@@ -54,12 +55,12 @@ namespace Oragon.Common.RingBuffer
 
                 while (this.availableBuffer.TryDequeue(out tmpBufferElement) == false)
                 {
-                    System.Diagnostics.Debug.WriteLine($"RingBuffer | Waiting.. Disponibilidade:{availableBuffer.Count}");
+                    //System.Diagnostics.Debug.WriteLine($"RingBuffer | Waiting.. Disponibilidade:{availableBuffer.Count}");
 
                     Thread.Sleep(waitTime);
                 }
 
-                System.Diagnostics.Debug.WriteLine($"RingBuffer | Ok! Disponibilidade: {availableBuffer.Count}");
+                //System.Diagnostics.Debug.WriteLine($"RingBuffer | Ok! Disponibilidade: {availableBuffer.Count}");
 
                 this.Current = tmpBufferElement;
 
@@ -74,11 +75,6 @@ namespace Oragon.Common.RingBuffer
                 GC.SuppressFinalize(this);
             }
         }
-
-
-
-
-
 
     }
 }

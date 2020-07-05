@@ -1,0 +1,41 @@
+version: '3.4'
+
+services:
+  oragon.common.ringbuffer.publisher:
+    image: ${DOCKER_REGISTRY-}oragoncommonringbufferconsoletestapp
+    build:
+      context: ./
+      dockerfile: ./benchmark/Oragon.Common.RingBuffer.ConsoleTestApp/Dockerfile
+    command: ["role", "publisher"]
+    networks:
+    - ring_buffer_tests
+
+  oragon.common.ringbuffer.consumer:
+    image: ${DOCKER_REGISTRY-}oragoncommonringbufferconsoletestapp
+    build:
+      context: ./
+      dockerfile: ./benchmark/Oragon.Common.RingBuffer.ConsoleTestApp/Dockerfile
+    command: ["role", "consumer"]
+    networks:
+    - ring_buffer_tests
+
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+    - 5672:5672
+    - 15672:15672
+    environment:
+    - RABBITMQ_DEFAULT_USER=logUser 
+    - RABBITMQ_DEFAULT_PASS=logPwd
+    - RABBITMQ_DEFAULT_VHOST=EnterpriseLog
+    networks:
+    - ring_buffer_tests
+    volumes:
+    - rabbitmq_data:/var/lib/rabbitmq/mnesia/
+
+networks:
+   ring_buffer_tests:
+     driver: bridge
+
+volumes:
+  rabbitmq_data:

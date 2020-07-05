@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Oragon.Common.RingBuffer.ConsoleTestApp": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

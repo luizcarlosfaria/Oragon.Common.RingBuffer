@@ -28,7 +28,7 @@ namespace Oragon.Common.RingBuffer.Tests
                 var task = factory.StartNew(() =>
                 {
                     using var accquisiton = ringBuffer.Accquire();
-                    System.Threading.Thread.Sleep(workTime);
+                    System.Threading.Thread.Sleep(workTime);                    
                     //System.Diagnostics.Debug.WriteLine($"Item {x.Current} - processado!");
 
                 });

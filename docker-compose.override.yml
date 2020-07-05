@@ -1,0 +1,5 @@
+version: '3.4'
+services:
+  oragon.common.ringbuffer.publisher:
+
+  oragon.common.ringbuffer.consumer:

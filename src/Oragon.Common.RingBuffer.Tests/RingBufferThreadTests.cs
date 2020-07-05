@@ -20,8 +20,6 @@ namespace Oragon.Common.RingBuffer.Tests
         {
             RingBuffer<int> ringBuffer = new Common.RingBuffer.RingBuffer<int>(bufferSize, () => index++, waitTime);
 
-            var factory = new TaskFactory();
-
             List<Thread> threads = new List<Thread>();
 
             for (int i = 0; i < runCount; i++)
