@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30128.36
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Oragon.Common.RingBuffer.ConsoleTestApp", "benchmark\Oragon.Common.RingBuffer.ConsoleTestApp\Oragon.Common.RingBuffer.ConsoleTestApp.csproj", "{7595094C-EBB7-4B13-B056-53C30DDB2B36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Oragon.Common.RingBuffer.ConsoleTestApp", "benchmark\Oragon.Common.RingBuffer.BenchmarkApp\Oragon.Common.RingBuffer.BenchmarkApp.csproj", "{7595094C-EBB7-4B13-B056-53C30DDB2B36}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{48E7B487-AF2D-4FBC-9B71-35D1CB8306D2}"
 EndProject

@@ -2,19 +2,19 @@ version: '3.4'
 
 services:
   oragon.common.ringbuffer.publisher:
-    image: ${DOCKER_REGISTRY-}oragoncommonringbufferconsoletestapp
+    image: ${DOCKER_REGISTRY-}oragoncommonringbufferbenchmarkapp
     build:
       context: ./
-      dockerfile: ./benchmark/Oragon.Common.RingBuffer.ConsoleTestApp/Dockerfile
+      dockerfile: ./benchmark/Oragon.Common.RingBuffer.BenchmarkApp/Dockerfile
     command: ["role", "publisher"]
     networks:
     - ring_buffer_tests
 
   oragon.common.ringbuffer.consumer:
-    image: ${DOCKER_REGISTRY-}oragoncommonringbufferconsoletestapp
+    image: ${DOCKER_REGISTRY-}oragoncommonringbufferbenchmarkapp
     build:
       context: ./
-      dockerfile: ./benchmark/Oragon.Common.RingBuffer.ConsoleTestApp/Dockerfile
+      dockerfile: ./benchmark/Oragon.Common.RingBuffer.BenchmarkApp/Dockerfile
     command: ["role", "consumer"]
     networks:
     - ring_buffer_tests
