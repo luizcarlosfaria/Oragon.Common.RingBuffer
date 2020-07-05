@@ -7,8 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" Version="0.12.1" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
     <PackageReference Include="RabbitMQ.Client" Version="6.1.0" />
+    <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20303.1" />
   </ItemGroup>
 
   <ItemGroup>

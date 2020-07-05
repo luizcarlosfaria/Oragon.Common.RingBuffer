@@ -1,27 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.CommandLine;
+using System.CommandLine.Builder;
+using System.CommandLine.Parsing;
 using System.Threading;
+using BenchmarkDotNet.Running;
 using Oragon.Common.RingBuffer.Specialized;
 using RabbitMQ.Client;
 
-namespace Oragon.Common.RingBuffer.ConsoleTestApp
+namespace Oragon.Common.RingBuffer.BenchmarkApp
 {
     class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
-            TestRoleProgram.Start(args);
-            return;
+            var role = RunAsCommand(args);
 
-            if (args[0] == "role" && args[1] == "publisher")
+            switch (role)
             {
-                PublisherRoleProgram.Start(args);
-                //TestRoleProgram.Start(args);
+                case "benchmark":
+                    var summary = BenchmarkRunner.Run<BenchmarkProgram>();
+                
+                break;
+                case "publisher": PublisherRoleProgram.Start(); break;
+                case "consumer": ConsumerRoleProgram.Start(); break;
+                default:
+                    Console.WriteLine($"role {role} not found");
+                    return -1;
             }
-            else if (args[0] == "role" && args[1] == "consumer")
+
+            return 0;
+        }
+
+
+        static string RunAsCommand(string[] args)
+        {
+            var root = new RootCommand("RingBuffer BenchmarkApp") {
+                new Option<string>("--role", "--role"){
+                }
+            };
+            var parseResult = new CommandLineBuilder(root)
+            .Build()
+            .Parse(args);
+
+            if (parseResult.Errors.Count > 0)
             {
-                ConsumerRoleProgram.Start(args);
+                foreach (var erro in parseResult.Errors)
+                    Console.WriteLine(erro.Message);
+
+                throw new InvalidOperationException();
             }
+            Console.WriteLine(parseResult.Diagram());
+
+
+            var role = parseResult.ValueForOption<string>("role");
+
+            return role;
         }
 
     }

@@ -4,7 +4,7 @@ using System.Threading;
 using Oragon.Common.RingBuffer.Specialized;
 using RabbitMQ.Client;
 
-namespace Oragon.Common.RingBuffer.ConsoleTestApp
+namespace Oragon.Common.RingBuffer.BenchmarkApp
 {
     public class PublisherRoleProgram
     {
@@ -43,7 +43,7 @@ namespace Oragon.Common.RingBuffer.ConsoleTestApp
         }
 
 
-        public static void Start(string[] args)
+        public static void Start()
         {
 
 

@@ -1,4 +1,8 @@
-﻿using Oragon.Common.RingBuffer.Specialized;
+﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Engines;
+using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Running;
+using Oragon.Common.RingBuffer.Specialized;
 using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
@@ -7,22 +11,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Oragon.Common.RingBuffer.ConsoleTestApp
+namespace Oragon.Common.RingBuffer.BenchmarkApp
 {
-    public static class TestRoleProgram
+    [SimpleJob(RunStrategy.ColdStart, RuntimeMoniker.NetCoreApp50, targetCount: 5)]
+    //[MinColumn, MaxColumn, MeanColumn, MedianColumn]
+    public class BenchmarkProgram
     {
-        static DisposableRingBuffer<IConnection> connectionRingBuffer;
-        static DisposableRingBuffer<IModel> modelRingBuffer;
-        static ConnectionFactory connectionFactory;
+        DisposableRingBuffer<IConnection> connectionRingBuffer;
+        DisposableRingBuffer<IModel> modelRingBuffer;
+        ConnectionFactory connectionFactory;
 
-        internal static void Start(string[] args)
+        public BenchmarkProgram()
         {
-            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(15));
 
+            //System.Threading.Thread.Sleep(TimeSpan.FromSeconds(15));
+
+            
+          
+        }
+
+        [GlobalSetup]
+        public void GlobalSetup()
+        {
             connectionFactory = new ConnectionFactory()
             {
                 Port = 5672,
-                HostName = "rabbitmq",
+                HostName = "localhost",
                 UserName = "logUser",
                 Password = "logPwd",
                 VirtualHost = "EnterpriseLog",
@@ -30,28 +44,6 @@ namespace Oragon.Common.RingBuffer.ConsoleTestApp
                 RequestedHeartbeat = TimeSpan.FromMinutes(1)
             };
 
-            Test2();
-            Test1();
-
-            Test1();
-            Test2();
-
-            Test2();
-            Test1();
-
-            Test1();
-            Test2();
-
-            Test2();
-            Test1();
-
-            Test1();
-            Test2();
-        }
-
-        public static void Test1()
-        {
-            var message = new ReadOnlyMemory<byte>(System.Text.Encoding.UTF8.GetBytes("0"));
             Func<IConnection> getConnection = () => connectionFactory.CreateConnection();
             Func<IModel> getModel = () =>
             {
@@ -60,12 +52,27 @@ namespace Oragon.Common.RingBuffer.ConsoleTestApp
             };
 
             connectionRingBuffer = new DisposableRingBuffer<IConnection>(10, getConnection, TimeSpan.FromMilliseconds(10));
-            modelRingBuffer = new DisposableRingBuffer<IModel>(15, getModel, TimeSpan.FromMilliseconds(10));
+            modelRingBuffer = new DisposableRingBuffer<IModel>(30, getModel, TimeSpan.FromMilliseconds(10));
 
+        }
+
+        [GlobalCleanup]
+        public void GlobalCleanup()
+        {
+            modelRingBuffer.Dispose();
+            connectionRingBuffer.Dispose();
+        }
+
+
+        [Benchmark]
+        public int WithRingBuffer()
+        {
+            var message = new ReadOnlyMemory<byte>(System.Text.Encoding.UTF8.GetBytes("0"));
+            
             Stopwatch stopwatch = new Stopwatch();
 
             stopwatch.Start();
-            for (var i = 0; i < 10; i++)
+            for (var i = 0; i < 100; i++)
                 for (var j = 0; j < 30; j++)
                     using (var data = modelRingBuffer.Accquire())
                     {
@@ -76,18 +83,19 @@ namespace Oragon.Common.RingBuffer.ConsoleTestApp
 
             stopwatch.Stop();
 
-            modelRingBuffer.Dispose();
-            connectionRingBuffer.Dispose();
+          
             Console.WriteLine($"Test 1 | com RingBuffer | {stopwatch.Elapsed:G}");
+            return 0;
         }
 
-        public static void Test2()
+        [Benchmark]
+        public int WithoutRingBuffer()
         {
             var message = new ReadOnlyMemory<byte>(System.Text.Encoding.UTF8.GetBytes("0"));
 
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            for (var i = 0; i < 10; i++)
+            for (var i = 0; i < 100; i++)
                 using (var connection = connectionFactory.CreateConnection())
                 {
                     for (var j = 0; j < 30; j++)
@@ -101,6 +109,7 @@ namespace Oragon.Common.RingBuffer.ConsoleTestApp
             stopwatch.Stop();
 
             Console.WriteLine($"Test 2 | sem RingBuffer | {stopwatch.Elapsed:G}");
+            return 0;
         }
     }
 }

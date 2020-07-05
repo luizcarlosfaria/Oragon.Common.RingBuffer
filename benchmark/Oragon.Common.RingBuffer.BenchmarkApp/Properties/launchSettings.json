@@ -1,7 +1,8 @@
 {
   "profiles": {
-    "Oragon.Common.RingBuffer.ConsoleTestApp": {
-      "commandName": "Project"
+    "Oragon.Common.RingBuffer.BenchmarkApp": {
+      "commandName": "Project",
+      "commandLineArgs": "--role benchmark"
     },
     "Docker": {
       "commandName": "Docker"

@@ -6,7 +6,7 @@ using Oragon.Common.RingBuffer.Specialized;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
-namespace Oragon.Common.RingBuffer.ConsoleTestApp
+namespace Oragon.Common.RingBuffer.BenchmarkApp
 {
     public class ConsumerRoleProgram
     {
@@ -53,7 +53,7 @@ namespace Oragon.Common.RingBuffer.ConsoleTestApp
         }
 
 
-        public static void Start(string[] args)
+        public static void Start()
         {
             Console.WriteLine("Wait... 1"); Thread.Sleep(TimeSpan.FromSeconds(10));
             Console.WriteLine("Wait... 2"); Thread.Sleep(TimeSpan.FromSeconds(10));

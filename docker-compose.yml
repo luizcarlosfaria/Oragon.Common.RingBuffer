@@ -6,7 +6,7 @@ services:
     build:
       context: ./
       dockerfile: ./benchmark/Oragon.Common.RingBuffer.BenchmarkApp/Dockerfile
-    command: ["role", "publisher"]
+    command: ["--role", "publisher"]
     networks:
     - ring_buffer_tests
 
@@ -15,7 +15,7 @@ services:
     build:
       context: ./
       dockerfile: ./benchmark/Oragon.Common.RingBuffer.BenchmarkApp/Dockerfile
-    command: ["role", "consumer"]
+    command: ["--role", "consumer"]
     networks:
     - ring_buffer_tests
 
