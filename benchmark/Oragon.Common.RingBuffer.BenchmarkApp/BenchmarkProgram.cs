@@ -1,6 +1,13 @@
-﻿using BenchmarkDotNet.Attributes;
+﻿using BenchmarkDotNet.Analysers;
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Columns;
+using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Engines;
+using BenchmarkDotNet.Exporters;
+using BenchmarkDotNet.Exporters.Csv;
 using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Loggers;
+using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
 using Oragon.Common.RingBuffer.Specialized;
 using RabbitMQ.Client;
@@ -13,6 +20,8 @@ using System.Threading.Tasks;
 
 namespace Oragon.Common.RingBuffer.BenchmarkApp
 {
+
+    [Config(typeof(Config))]
     [SimpleJob(RunStrategy.ColdStart, RuntimeMoniker.NetCoreApp50, targetCount: 5)]
     //[MinColumn, MaxColumn, MeanColumn, MedianColumn]
     public class BenchmarkProgram
@@ -20,19 +29,31 @@ namespace Oragon.Common.RingBuffer.BenchmarkApp
         DisposableRingBuffer<IConnection> connectionRingBuffer;
         DisposableRingBuffer<IModel> modelRingBuffer;
         ConnectionFactory connectionFactory;
+        ReadOnlyMemory<byte> message;
+
+        private class Config : ManualConfig
+        {
+            public Config()
+            {
+                AddJob(Job.Default);
+                AddLogger(ConsoleLogger.Default);
+                AddColumn(TargetMethodColumn.Method);
+                AddColumn(StatisticColumn.AllStatistics);
+                AddExporter(RPlotExporter.Default, CsvExporter.Default);
+                AddAnalyser(EnvironmentAnalyser.Default);
+                UnionRule = ConfigUnionRule.AlwaysUseLocal;
+            }
+        }
 
         public BenchmarkProgram()
         {
-
-            //System.Threading.Thread.Sleep(TimeSpan.FromSeconds(15));
-
-
-
         }
 
         [GlobalSetup]
         public void GlobalSetup()
         {
+            message = new ReadOnlyMemory<byte>(System.Text.Encoding.UTF8.GetBytes("0"));
+
             connectionFactory = new ConnectionFactory()
             {
                 Port = 5672,
@@ -65,16 +86,23 @@ namespace Oragon.Common.RingBuffer.BenchmarkApp
 
         private static void Send(IModel channel, ReadOnlyMemory<byte> message)
         {
-            var prop = channel.CreateBasicProperties();
-            prop.DeliveryMode = 1;
-            channel.BasicPublish("amq.fanout", "none", prop, message);
+            try
+            {
+                var prop = channel.CreateBasicProperties();
+                prop.DeliveryMode = 1;
+                channel.BasicPublish("amq.fanout", "none", prop, message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
+
         }
 
         [Benchmark]
         public int WithRingBuffer()
         {
-            var message = new ReadOnlyMemory<byte>(System.Text.Encoding.UTF8.GetBytes("0"));
-
             for (var i = 0; i < 100; i++)
                 for (var j = 0; j < 30; j++)
                     using (var accquisiton = modelRingBuffer.Accquire())
@@ -87,8 +115,6 @@ namespace Oragon.Common.RingBuffer.BenchmarkApp
         [Benchmark]
         public int WithoutRingBuffer()
         {
-            var message = new ReadOnlyMemory<byte>(System.Text.Encoding.UTF8.GetBytes("0"));
-
             for (var i = 0; i < 100; i++)
                 using (var connection = connectionFactory.CreateConnection())
                 {
@@ -99,6 +125,17 @@ namespace Oragon.Common.RingBuffer.BenchmarkApp
                         }
                 }
             return 0;
+        }
+
+        internal static void Analyse(Summary summary)
+        {
+            string nameColumn = TargetMethodColumn.Method.ColumnName;
+            string statisticColumn = StatisticColumn.Mean.ColumnName;
+
+            //summary.Table.FullContentWithHeader.
+
+
+
         }
     }
 }
