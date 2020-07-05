@@ -35,7 +35,7 @@ namespace Oragon.Common.RingBuffer.BenchmarkApp
         {
             public Config()
             {
-                AddJob(Job.Default);
+                AddJob(Job.Dry);
                 AddLogger(ConsoleLogger.Default);
                 AddColumn(TargetMethodColumn.Method);
                 AddColumn(StatisticColumn.AllStatistics);
@@ -72,8 +72,8 @@ namespace Oragon.Common.RingBuffer.BenchmarkApp
                 return connection.Current.CreateModel();
             };
 
-            connectionRingBuffer = new DisposableRingBuffer<IConnection>(10, getConnection, TimeSpan.FromMilliseconds(10));
-            modelRingBuffer = new DisposableRingBuffer<IModel>(30, getModel, TimeSpan.FromMilliseconds(10));
+            connectionRingBuffer = new DisposableRingBuffer<IConnection>(3, getConnection, TimeSpan.FromMilliseconds(10));
+            modelRingBuffer = new DisposableRingBuffer<IModel>(10, getModel, TimeSpan.FromMilliseconds(10));
 
         }
 
@@ -103,8 +103,8 @@ namespace Oragon.Common.RingBuffer.BenchmarkApp
         [Benchmark]
         public int WithRingBuffer()
         {
-            for (var i = 0; i < 100; i++)
-                for (var j = 0; j < 30; j++)
+            for (var i = 0; i < 5; i++)
+                for (var j = 0; j < 300; j++)
                     using (var accquisiton = modelRingBuffer.Accquire())
                     {
                         Send(accquisiton.Current, message);
@@ -115,10 +115,10 @@ namespace Oragon.Common.RingBuffer.BenchmarkApp
         [Benchmark]
         public int WithoutRingBuffer()
         {
-            for (var i = 0; i < 100; i++)
+            for (var i = 0; i < 5; i++)
                 using (var connection = connectionFactory.CreateConnection())
                 {
-                    for (var j = 0; j < 30; j++)
+                    for (var j = 0; j < 300; j++)
                         using (var model = connection.CreateModel())
                         {
                             Send(model, message);
