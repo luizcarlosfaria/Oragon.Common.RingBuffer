@@ -39,4 +39,12 @@ Implementação de Ring/Circular Buffer com .NET Standard para .NET
 * Adicionar instrumentação para permitir a criação de métricas
 * Permitir que, com o uso das métricas, seja possível criar um buffer elástico
 
-:copyright: LuizCarlosFaria, gaGO.io, Oragon
+:copyright: [Luiz Carlos Faria](http://gago.io/) ![made in brazil][brazil]
+
+# Posts
+
+[![Ring Buffer – Antecipe, otimize e evite custos excessivos][ring-buffer2]](https://gago.io/blog/ring-buffer-quase-um-uber/?utm_source=github&utm_medium=luizcarlosfaria&utm_content=Oragon.Common.RingBuffer) 
+
+[brazil]:http://www.goal.cc/content/images/flags/28.png
+[ring-buffer2]:https://gago.io/wp-content/uploads/2020/07/ring-buffer2.png
+
