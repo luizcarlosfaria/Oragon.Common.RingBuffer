@@ -23,7 +23,10 @@ Implementação de Ring/Circular Buffer com .NET Standard para .NET
 * :radio_button: Notification - Pipeline do Jenkins + Twitter
 
 ## Abertura
-* :radio_button: Definir e aplicar licenças.
+* :radio_button: Definir e aplicar licenças
+  * Permitir uso Irrestrito
+  * Não permitir modificação
+
 
 # Decision Log
 
