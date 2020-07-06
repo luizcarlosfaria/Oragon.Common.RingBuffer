@@ -44,6 +44,7 @@ Implementação de Ring/Circular Buffer com .NET Standard para .NET
 # Posts
 
 [![Ring Buffer – Antecipe, otimize e evite custos excessivos][ring-buffer2]](https://gago.io/blog/ring-buffer-quase-um-uber/?utm_source=github&utm_medium=luizcarlosfaria&utm_content=Oragon.Common.RingBuffer) 
+Ring Buffer, também chamado de Circular Buffer é uma estrutura de dados muito poderosa. Seu nome já traz o spoiler e entrega o ouro, afinal não deixa de ser um buffer, só que trabalhando em formato de anel/circular. Se você não faz ideia do que seja, vem comigo nessa viagem pois vamos dissecar o assunto e ainda compará-la ao processo de uberização dos objetos custosos.
 
 [brazil]:http://www.goal.cc/content/images/flags/28.png
 [ring-buffer2]:https://gago.io/wp-content/uploads/2020/07/ring-buffer2.png
