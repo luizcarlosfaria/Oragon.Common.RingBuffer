@@ -7,7 +7,6 @@ Implementação de Ring/Circular Buffer com .NET Standard para .NET
 
 ## Criação
 * :heavy_check_mark: Criação do projeto e primeira versão. 
-* :heavy_check_mark: Sem licença e sem permissão de uso.
 
 ## Lapidação
 * :fire: Identificação de oportunidades e gaps
@@ -21,11 +20,6 @@ Implementação de Ring/Circular Buffer com .NET Standard para .NET
 * :radio_button: Deploy - Pipeline do Jenkins - MyGet
 * :radio_button: Deploy - Pipeline do Jenkins - NuGet
 * :radio_button: Notification - Pipeline do Jenkins + Twitter
-
-## Abertura
-* :radio_button: Definir e aplicar licenças
-  * Permitir uso Irrestrito
-  * Não permitir modificação
 
 
 # Decision Log
