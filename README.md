@@ -39,3 +39,4 @@ Implementação de Ring/Circular Buffer com .NET Standard para .NET
 * Adicionar instrumentação para permitir a criação de métricas
 * Permitir que, com o uso das métricas, seja possível criar um buffer elástico
 
+:copyright: LuizCarlosFaria, gaGO.io, Oragon
