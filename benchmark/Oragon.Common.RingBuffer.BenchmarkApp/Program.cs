@@ -20,7 +20,7 @@ namespace Oragon.Common.RingBuffer.BenchmarkApp
             {
                 case "benchmark":
                     var summary = BenchmarkRunner.Run<BenchmarkProgram>();
-                    BenchmarkProgram.Analyse(summary);
+                    //BenchmarkProgram.Analyse(summary);
                 break;
                 case "publisher": PublisherRoleProgram.Start(); break;
                 case "consumer": ConsumerRoleProgram.Start(); break;

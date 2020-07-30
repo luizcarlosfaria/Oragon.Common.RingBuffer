@@ -47,9 +47,9 @@ namespace Oragon.Common.RingBuffer.BenchmarkApp
 
             //ConsumerRoleProgram.Connection = ConsumerRoleProgram.ConnectionFactory.CreateConnection();
 
-            ConsumerRoleProgram.connectionRingBuffer = new DisposableRingBuffer<IConnection>(10, ConnectionFactoryFunc, TimeSpan.FromMilliseconds(5));
+            ConsumerRoleProgram.connectionRingBuffer = new DisposableRingBuffer<IConnection>(2, ConnectionFactoryFunc, TimeSpan.FromMilliseconds(5));
 
-            ConsumerRoleProgram.modelRingBuffer = new DisposableRingBuffer<IModel>(40, ModelFactory, TimeSpan.FromMilliseconds(5));
+            ConsumerRoleProgram.modelRingBuffer = new DisposableRingBuffer<IModel>(4, ModelFactory, TimeSpan.FromMilliseconds(5));
         }
 
 

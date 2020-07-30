@@ -84,30 +84,41 @@ namespace Oragon.Common.RingBuffer.BenchmarkApp
             connectionRingBuffer.Dispose();
         }
 
-        private static void Send(IModel channel, ReadOnlyMemory<byte> message)
+        public void CreateQueue(IModel model, string queueName) =>
+            model.QueueDeclare(queueName, true, false, false, null);
+
+        public uint GetMessageCount(IModel model, string queueName) =>
+            model.MessageCount(queueName);
+
+        private static void Send(IModel channel, string queueName, ReadOnlyMemory<byte> message)
         {
             try
             {
                 var prop = channel.CreateBasicProperties();
                 prop.DeliveryMode = 1;
-                channel.BasicPublish("amq.fanout", "none", prop, message);
+                channel.BasicPublish(string.Empty, queueName, prop, message);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
                 throw;
             }
-
         }
 
         [Benchmark]
         public int WithRingBuffer()
         {
+            string queueName = $"WithRingBuffer-{Guid.NewGuid().ToString("D")}";
+            using (var accquisiton = modelRingBuffer.Accquire())
+            {
+                CreateQueue(accquisiton.Current, queueName);
+            }
+
             for (var i = 0; i < 5; i++)
-                for (var j = 0; j < 300; j++)
+                for (var j = 0; j < 1000; j++)
                     using (var accquisiton = modelRingBuffer.Accquire())
                     {
-                        Send(accquisiton.Current, message);
+                        Send(accquisiton.Current, queueName, message);
                     }
             return 0;
         }
@@ -115,13 +126,22 @@ namespace Oragon.Common.RingBuffer.BenchmarkApp
         [Benchmark]
         public int WithoutRingBuffer()
         {
+            string queueName = $"WithoutRingBuffer-{Guid.NewGuid().ToString("D")}";
+            using (var connection = connectionFactory.CreateConnection())
+            {
+                using (var model = connection.CreateModel())
+                {
+                    CreateQueue(model, queueName);
+                }
+            }
+
             for (var i = 0; i < 5; i++)
                 using (var connection = connectionFactory.CreateConnection())
                 {
-                    for (var j = 0; j < 300; j++)
+                    for (var j = 0; j < 1000; j++)
                         using (var model = connection.CreateModel())
                         {
-                            Send(model, message);
+                            Send(model, queueName, message);
                         }
                 }
             return 0;
