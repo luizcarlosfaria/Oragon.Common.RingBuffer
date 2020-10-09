@@ -99,19 +99,19 @@ pipeline {
                     if (env.BRANCH_NAME.endsWith("-alpha")) {
 
                         for (int i = 0; i < projetcs.size(); ++i) {
-                            sh "dotnet pack ${projetcs[i]} --configuration Debug /p:PackageVersion=${BRANCH_NAME} --include-source --include-symbols --output ../output-packages"
+                            sh "dotnet pack ${projetcs[i]} --configuration Debug /p:PackageVersion=${BRANCH_NAME} --include-source --include-symbols --output ./output-packages"
                         }
 
                     } else if (env.BRANCH_NAME.endsWith("-beta")) {
 
                         for (int i = 0; i < projetcs.size(); ++i) {
-                            sh "dotnet pack ${projetcs[i]} --configuration Release /p:PackageVersion=${BRANCH_NAME} --output ../output-packages"                        
+                            sh "dotnet pack ${projetcs[i]} --configuration Release /p:PackageVersion=${BRANCH_NAME} --output ./output-packages"                        
                         }
 
                     } else {
 
                         for (int i = 0; i < projetcs.size(); ++i) {
-                            sh "dotnet pack ${projetcs[i]} --configuration Release /p:PackageVersion=${BRANCH_NAME} --output ../output-packages"                        
+                            sh "dotnet pack ${projetcs[i]} --configuration Release /p:PackageVersion=${BRANCH_NAME} --output ./output-packages"                        
                         }
 
                     }
