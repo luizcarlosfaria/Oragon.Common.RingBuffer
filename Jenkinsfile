@@ -82,7 +82,7 @@ pipeline {
                             /d:sonar.login="$SONARQUBE_KEY" \
                             /d:sonar.cs.opencover.reportsPaths="/output-coverage/coverage.xml" \
                             /d:sonar.coverage.exclusions="src/Oragon.Common.RingBuffer.Tests/**/*,Examples/**/*,**/*.CodeGen.cs" \
-                                /d:sonar.test.exclusions="src/Oragon.Common.RingBuffer.Tests/**/*,Examples/**/*,**/*.CodeGen.cs" \
+                                /d:sonar.test.exclusions="src/Oragon.Common.RingBuffer.Testsx/**/*,Examples/**/*,**/*.CodeGen.cs" \
                                      /d:sonar.exclusions="src/Oragon.Common.RingBuffer.Tests/**/*,Examples/**/*,**/*.CodeGen.cs"
                         
                         dotnet build ./Oragon.Common.RingBuffer.sln
