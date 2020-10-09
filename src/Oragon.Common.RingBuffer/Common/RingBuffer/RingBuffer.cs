@@ -11,8 +11,6 @@ namespace Oragon.Common.RingBuffer
 
         protected readonly ConcurrentQueue<T> availableBuffer;
 
-        private static bool IsDebugMode = (System.Diagnostics.Debugger.IsAttached);
-
         public RingBuffer(int capacity, Func<T> bufferFactory) : this(capacity, bufferFactory, TimeSpan.FromMilliseconds(50))
         {
         }
@@ -56,13 +54,16 @@ namespace Oragon.Common.RingBuffer
                 while (this.availableBuffer.TryDequeue(out tmpBufferElement) is false)
                 {
 
-                    if (IsDebugMode) System.Diagnostics.Debug.WriteLine($"RingBuffer | Waiting.. Disponibilidade:{availableBuffer.Count}");
+#if DEBUG
+                    System.Diagnostics.Debug.WriteLine($"RingBuffer | Waiting.. Disponibilidade:{availableBuffer.Count}");
+#endif
 
                     Thread.Sleep(waitTime);
                 }
 
-                if (IsDebugMode) System.Diagnostics.Debug.WriteLine($"RingBuffer | Ok! Disponibilidade: {availableBuffer.Count}");
-
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine($"RingBuffer | Ok! Disponibilidade: {availableBuffer.Count}");
+#endif
                 this.Current = tmpBufferElement;
 
             }
