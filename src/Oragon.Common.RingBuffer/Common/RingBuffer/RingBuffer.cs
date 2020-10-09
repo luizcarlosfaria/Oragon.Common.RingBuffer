@@ -11,14 +11,7 @@ namespace Oragon.Common.RingBuffer
 
         protected readonly ConcurrentQueue<T> availableBuffer;
 
-        private static bool IsDebugMode;
-
-        static RingBuffer()
-        {
-            IsDebugMode = (System.Diagnostics.Debugger.IsAttached);
-        }
-
-
+        private static bool IsDebugMode = (System.Diagnostics.Debugger.IsAttached);
 
         public RingBuffer(int capacity, Func<T> bufferFactory) : this(capacity, bufferFactory, TimeSpan.FromMilliseconds(50))
         {
