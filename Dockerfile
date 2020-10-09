@@ -1,4 +1,5 @@
-FROM mcr.microsoft.com/dotnet/sdk:5.0
+#FROM mcr.microsoft.com/dotnet/sdk:5.0
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1
 
 RUN export PATH="$PATH:/root/.dotnet/tools"
 RUN dotnet tool install --global dotnet-sonarscanner
