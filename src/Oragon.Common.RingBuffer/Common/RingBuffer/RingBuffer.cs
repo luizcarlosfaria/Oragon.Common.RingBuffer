@@ -32,7 +32,6 @@ namespace Oragon.Common.RingBuffer
             this.WaitTime = waitTime;
             this.availableBuffer = new ConcurrentQueue<T>();
             this.Initialize();
-            if (availableBuffer.Count == 0) throw new InvalidOperationException("Buffer is empty");
         }
 
         private void Initialize()
