@@ -38,5 +38,32 @@ namespace Oragon.Common.RingBuffer.Tests
             });
         }
 
+        [Fact]
+        public void TestInheritanceException()
+        {
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                var _ = new RingBufferFake<int>(1, () => 1);
+            });
+        }
+
+
+    }
+
+    public class RingBufferFake<T> : RingBuffer<T>
+    {
+        public RingBufferFake(int capacity, Func<T> bufferFactory) : base(capacity, bufferFactory, TimeSpan.FromMilliseconds(50))
+        {
+        }
+
+        public RingBufferFake(int capacity, Func<T> itemFactoryFunc, TimeSpan waitTime) : base(capacity, itemFactoryFunc, waitTime)
+        {
+
+        }
+
+        protected override void Initialize()
+        {
+
+        }
     }
 }
