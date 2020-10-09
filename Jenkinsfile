@@ -27,24 +27,7 @@ pipeline {
             }
 
         }
-        
-        stage('Setup databases') {
-            
-            agent any
-            
-            steps {
-
-                    sh  '''
-
-                        #docker-compose up -d
-
-                        #sleep 60
-
-                        '''
-            }
-
-        }
-
+     
 
         stage('Test') {
 
@@ -72,18 +55,18 @@ pipeline {
                         dotnet test ./src/Oragon.Common.RingBuffer.Tests/Oragon.Common.RingBuffer.Tests.csproj \
                             --configuration Debug \
                             --output ../output-tests  \
-                            /p:CollectCoverage=true \
-                            /p:CoverletOutputFormat=opencover \
-                            /p:CoverletOutput='/output-coverage/coverage.xml' \
-                            /p:Exclude="[Oragon.*.Tests]*"
+                            --collect:"XPlat Code Coverage" \
+                            --settings coverlet.runsettings \
+                            --results-directory "/output-coverage/" 
+                            
 
                         dotnet sonarscanner begin /k:"Oragon-RingBuffer" \
                             /d:sonar.host.url="http://sonar.oragon.io" \
                             /d:sonar.login="$SONARQUBE_KEY" \
-                            /d:sonar.cs.opencover.reportsPaths="/output-coverage/coverage.xml" \
-                            /d:sonar.coverage.exclusions="src/Oragon.Common.RingBuffer.Tests/**/*,Examples/**/*,**/*.CodeGen.cs" \
-                                /d:sonar.test.exclusions="src/Oragon.Common.RingBuffer.Testsx/**/*,Examples/**/*,**/*.CodeGen.cs" \
-                                     /d:sonar.exclusions="src/Oragon.Common.RingBuffer.Tests/**/*,Examples/**/*,**/*.CodeGen.cs"
+                            /d:sonar.cs.opencover.reportsPaths=$(find /output-coverage/ -name "coverage.opencover.xml" | grep coverage.opencover.xml) \
+                            /d:sonar.coverage.exclusions="src/Oragon.Common.RingBuffer.Tests/**/*" \
+                                /d:sonar.test.exclusions="__/Oragon.Common.RingBuffer.Tests/**/*" \
+                                     /d:sonar.exclusions="src/Oragon.Common.RingBuffer.Tests/**/*"
                         
                         dotnet build ./Oragon.Common.RingBuffer.sln
                         dotnet sonarscanner end /d:sonar.login="$SONARQUBE_KEY"

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
 using System.Threading;
 
 namespace Oragon.Common.RingBuffer
@@ -11,6 +10,15 @@ namespace Oragon.Common.RingBuffer
         private readonly Func<T> itemFactoryFunc;
 
         protected readonly ConcurrentQueue<T> availableBuffer;
+
+        private static bool IsDebugMode;
+
+        static RingBuffer()
+        {
+            IsDebugMode = (System.Diagnostics.Debugger.IsAttached);
+        }
+
+
 
         public RingBuffer(int capacity, Func<T> bufferFactory) : this(capacity, bufferFactory, TimeSpan.FromMilliseconds(50))
         {
@@ -27,7 +35,7 @@ namespace Oragon.Common.RingBuffer
             if (availableBuffer.Count == 0) throw new InvalidOperationException("Buffer is empty");
         }
 
-        protected virtual void Initialize()
+        private void Initialize()
         {
             for (var i = 0; i < this.Capacity; i++)
             {
@@ -53,14 +61,15 @@ namespace Oragon.Common.RingBuffer
 
                 T tmpBufferElement;
 
-                while (this.availableBuffer.TryDequeue(out tmpBufferElement) == false)
+                while (this.availableBuffer.TryDequeue(out tmpBufferElement) is false)
                 {
-                    //System.Diagnostics.Debug.WriteLine($"RingBuffer | Waiting.. Disponibilidade:{availableBuffer.Count}");
+
+                    if (IsDebugMode) System.Diagnostics.Debug.WriteLine($"RingBuffer | Waiting.. Disponibilidade:{availableBuffer.Count}");
 
                     Thread.Sleep(waitTime);
                 }
 
-                //System.Diagnostics.Debug.WriteLine($"RingBuffer | Ok! Disponibilidade: {availableBuffer.Count}");
+                if (IsDebugMode) System.Diagnostics.Debug.WriteLine($"RingBuffer | Ok! Disponibilidade: {availableBuffer.Count}");
 
                 this.Current = tmpBufferElement;
 
@@ -74,6 +83,8 @@ namespace Oragon.Common.RingBuffer
 
                 GC.SuppressFinalize(this);
             }
+
+
         }
 
     }

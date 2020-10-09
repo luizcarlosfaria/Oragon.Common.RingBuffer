@@ -3,7 +3,7 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1
 
 RUN export PATH="$PATH:/root/.dotnet/tools"
 RUN dotnet tool install --global dotnet-sonarscanner
-RUN dotnet tool install --global coverlet.console --version 1.4.1
+RUN dotnet tool install --global coverlet.console --version 1.7.2
 #RUN chmod +x /root/.dotnet/tools/.store/dotnet-sonarscanner/4.3.1/dotnet-sonarscanner/4.3.1/tools/netcoreapp2.1/any/sonar-scanner-3.2.0.1227/bin/sonar-scanner
 #RUN cat /root/.dotnet/tools/.store/dotnet-sonarscanner/4.3.1/dotnet-sonarscanner/4.3.1/tools/netcoreapp2.1/any/sonar-scanner-3.2.0.1227/bin/sonar-scanner
 
