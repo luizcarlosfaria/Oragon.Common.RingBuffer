@@ -3,6 +3,22 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace>Oragon</RootNamespace>
+      <AssemblyName>Oragon.Common.RingBuffer</AssemblyName>
+      <PackageId>Oragon.Common.RingBuffer</PackageId>
+      <PackageProjectUrl>https://github.com/Oragon/Oragon.Contexts</PackageProjectUrl>
+      <RepositoryUrl>https://github.com/luizcarlosfaria/Oragon.Common.RingBuffer</RepositoryUrl>
+
+      <Authors>LuizCarlosFaria</Authors>
+      <Company>oragon.io</Company>
+      <Product>Oragon</Product>
+      <Description>Ring/Circular Buffer</Description>
+
+      <PackageIconUrl>http://gago.io/wp-content/uploads/2014/03/Oragon-Architecture-Penknife.export.png</PackageIconUrl>
+
+      <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+      <Version>1.0.0-alpha</Version>
+      <Copyright>Copyright 2018</Copyright>
+      <PackageTags>Oragon Architecture,  Oragon, Architecture, luiz, carlos, faria, luizcarlosfaria, oragonarchitect</PackageTags>
   </PropertyGroup>
 
 </Project>
